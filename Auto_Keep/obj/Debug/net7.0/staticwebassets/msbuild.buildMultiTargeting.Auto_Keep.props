@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Auto_Keep.props" />
+</Project>

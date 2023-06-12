@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Auto_Keep</name>
+    </assembly>
+    <members>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.ListarEstoqueGeral">
+            <summary>
+            Obter lista de estoque monetário
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.RegistrarEstoque(Auto_Keep.Models.AutoKeep.EstoqueMonetario)">
+            <summary>
+            Registrar novo estoque monetário
+            </summary>
+            <param name="estoqueMonetario"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.FiltrarIdEstoque(System.Int32)">
+            <summary>
+            Filtrar por id do estoque
+            </summary>
+            <param name="idEstoque">Id do estoque</param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.EditarEstoque(System.Int32,Auto_Keep.Models.AutoKeep.EstoqueMonetario)">
+            <summary>
+            Editar estoque monetário
+            </summary>
+            <param name="idEstoque">Id do estoque</param>
+            <param name="estoqueMonetario"></param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.AtualizarQtdEstoque(System.Int32,System.Int32)">
+            <summary>
+            Atualizar Quatidade do estoque monetário
+            </summary>
+            <param name="idEstoque">Id do estoque</param>
+            <param name="qtd"></param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.EstoqueMonetarioController.RemoverEstoque(System.Int32)">
+            <summary>
+            Remover referência da moeda ou cedula do estoque
+            </summary>
+            <param name="idEstoque">Id do estoque</param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.ListarPrecos">
+            <summary>
+            Obter lista de preços de todos veículos
+            </summary>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.ListarPrecosTipoVeiculos(System.Int32)">
+            <summary>
+            Filtrar preços por tipo de veículos
+            </summary>
+            <param name="id_Veiculos">Id do veículo</param>
+            <returns></returns>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.FiltrarPrecoPorId(System.Int32)">
+            <summary>
+            Filtrar preço por id do registro
+            </summary>
+            <param name="id_Preco">Id do preço</param>
+            <returns></returns>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.RegistrarPrecos(Auto_Keep.Models.AutoKeep.Precos)">
+            <summary>
+            Registrar preços dos veículos
+            </summary>
+            <param name="preco"></param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.EditarPrecos(System.Int32,Auto_Keep.Models.AutoKeep.Precos)">
+            <summary>
+            Editar precos dos veículos
+            </summary>
+            <param name="id_Preco">Id do preço</param>
+            <param name="precos"></param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.PrecosController.RemoverPrecos(System.Int32)">
+            <summary>
+            Remover preços registrados
+            </summary>
+            <param name="id_Preco">Id do preço</param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.TiposVeiculosController.ListarTipos">
+            <summary>
+            Obter lista de todoos tipos de veiculos
+            </summary>
+        </member>
+        <member name="M:Auto_Keep.Controllers.TiposVeiculosController.FiltrarTiposVeiculosPorId(System.Int32)">
+            <summary>
+            Filtrar tipo de veiculo por id do registro
+            </summary>
+            <param name="id_TipoVeiculo">Id do tipo de veiculo</param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.TiposVeiculosController.RegistrarTiposVeiculos(Auto_Keep.Models.AutoKeep.TiposVeiculos)">
+            <summary>
+            Registrar tipos de veículos
+            </summary>
+            <param name="tiposVeiculos"></param>
+        </member>
+        <member name="M:Auto_Keep.Controllers.TiposVeiculosController.EditarTiposVeiculos(System.Int32,Auto_Keep.Models.AutoKeep.TiposVeiculos)">
+            <summary>
+            Editar tipos de veículos
+            </summary>
+            <param name="id_TipoVeiculo">Id do tipo de veículo</param>
+            <param name="tiposVeiculos"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Auto_Keep.Controllers.TiposVeiculosController.RemoverTiposVeiculos(System.Int32)">
+            <summary>
+            Remover tipos de veículos
+            </summary>
+            <param name="id_TipoVeiculo">Id do tipo de veículo</param>
+        </member>
+        <member name="T:Auto_Keep.Migrations.InitialAutoKeep">
+            <inheritdoc />
+        </member>
+        <member name="M:Auto_Keep.Migrations.InitialAutoKeep.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Auto_Keep.Migrations.InitialAutoKeep.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Auto_Keep.Migrations.InitialAutoKeep.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
