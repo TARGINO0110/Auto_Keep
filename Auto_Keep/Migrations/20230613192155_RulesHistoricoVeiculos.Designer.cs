@@ -3,6 +3,7 @@ using System;
 using Auto_Keep.Models.DbContextAutoKeep;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auto_Keep.Migrations
 {
     [DbContext(typeof(AutoKeepContext))]
-    partial class AutoKeepContextModelSnapshot : ModelSnapshot
+    [Migration("20230613192155_RulesHistoricoVeiculos")]
+    partial class RulesHistoricoVeiculos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -36,6 +36,7 @@ namespace Auto_Keep.Controllers
         {
             var response = await _precosRepository.GetPrecosTipoVeiculo(id_Veiculos);
             return Ok(response);
+
         }
 
         /// <summary>

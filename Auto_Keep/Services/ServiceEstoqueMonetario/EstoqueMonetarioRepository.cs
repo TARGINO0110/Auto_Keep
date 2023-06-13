@@ -72,11 +72,11 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
             _validationAtributes.AtributesRequestEstoqueMonetario(estoqueMonetario);
             if (await GetValidaCedulaMoedaExiste((decimal)estoqueMonetario.Valor_Nota_Moeda)) throw new AppException("A nota ou moeda já existe em nossa base de dados!");
 
-            estoqueMonetario.Dt_Atualizado = DateTime.Now;
+            estoqueMonetario.Dt_Atualizado = DateTime.Now.ToUniversalTime();
 
             try
             {
-                await _dbContext.EstoqueMonetarios.AddAsync(estoqueMonetario);
+                await _dbContext.AddAsync(estoqueMonetario);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
             _validationAtributes.AtributesRequestEstoqueMonetario(estoqueMonetario);
             var estoqueMonetarioBase = await GetById(idEstoque) ?? throw new AppException("Nenhum estoque identificado na base de dados!");
 
-            estoqueMonetarioBase.Dt_Atualizado = DateTime.Now;
+            estoqueMonetarioBase.Dt_Atualizado = DateTime.Now.ToUniversalTime();
 
             _dbContext.Attach(estoqueMonetarioBase);
 

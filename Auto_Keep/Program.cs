@@ -11,6 +11,7 @@ using Auto_Keep.Utils.Validations;
 using Auto_Keep.Utils.Validations.Interfaces;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.OpenApi.Models;
 using System.IO.Compression;
 using System.Reflection;

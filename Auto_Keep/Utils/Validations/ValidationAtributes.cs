@@ -1,6 +1,8 @@
 ﻿using Auto_Keep.Helpers;
 using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Utils.Validations.Interfaces;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Auto_Keep.Utils.Validations
 {
@@ -12,7 +14,7 @@ namespace Auto_Keep.Utils.Validations
         {
             if (estoqueMonetario.Valor_Nota_Moeda is null)
                 throw new AppException("Necessário informar o valor da nota ou moeda!");
-            if (CedulaMoedaValida((decimal)estoqueMonetario.Valor_Nota_Moeda))
+            if (!CedulaMoedaValida((decimal)estoqueMonetario.Valor_Nota_Moeda))
                 throw new AppException($"A nota ou moeda não existe no padrão Real, informe as Seguintes opções: {string.Join("\n", NotasMoedas().ToList())}");
             if (estoqueMonetario.Qtd is null)
                 throw new AppException("Informar a quantidade para esse tipo de valor!");
@@ -30,6 +32,7 @@ namespace Auto_Keep.Utils.Validations
         public void AtributesRequestPrecos(Precos precos)
         {
             if (precos.Preco is null) throw new AppException("Necessácio informar o preço do veículo!");
+            if (precos.Id_TipoVeiculo == 0) throw new AppException("Necessário informar o código do veículo para identificação no preço!");
         }
 
         #endregion

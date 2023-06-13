@@ -50,7 +50,7 @@ namespace Auto_Keep.Services.ServiceTiposVeiculos
         {
             try
             {
-                return await _dbContext.TiposVeiculos.FirstOrDefaultAsync(item => item.Id_TipoVeiculo == id_TipoVeiculo);
+                return await _dbContext.TiposVeiculos.Include(item=>item.Precos).FirstOrDefaultAsync(item => item.Id_TipoVeiculo == id_TipoVeiculo);
             }
             catch (Exception ex)
             {
