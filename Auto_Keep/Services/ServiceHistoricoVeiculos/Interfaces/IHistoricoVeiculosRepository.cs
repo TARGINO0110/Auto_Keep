@@ -8,8 +8,9 @@ namespace Auto_Keep.Services.ServiceHistoricoVeiculos.Interfaces
         Task<IEnumerable<HistoricoVeiculos>> GetHistoricoVeiculosPlacas(string placaVeiculo, int? page, int? rows);
         Task<HistoricoVeiculos> GetById(long id_HistVeiculo);
         Task<bool> GetStatusVeiculo(HistoricoVeiculos historicoVeiculos);
-        Task PostEntradaVeiculo(HistoricoVeiculos historicoVeiculos);
-        Task<HistoricoVeiculos> PutSaidaVeiculo(long id_HistVeiculo, HistoricoVeiculos historicoVeiculos);
+        Task PostEntradaVeiculo(PostHistoricoVeiculos historicoVeiculos);
+        Task<HistoricoVeiculos> PutSaidaVeiculo(long id_HistVeiculo, PutHistoricoVeiculos historicoVeiculos);
+        Task<(decimal, TimeSpan)> GetObterValorEstadiaAtual(long id_HistVeiculo);
         Task<long> DeleteHistVeiculo(long id_HistVeiculo);
     }
 }

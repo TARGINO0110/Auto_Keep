@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Auto_Keep.Models.AutoKeep
 {
@@ -27,13 +28,41 @@ namespace Auto_Keep.Models.AutoKeep
 
         public bool SetExcedeHora()
         {
-            TimeSpan diferrenceDateTime = DataHora_Entrada.Value - DataHora_Saida.Value;
-            return diferrenceDateTime.TotalMinutes > 60 ? true : false;
+            if (DataHora_Entrada.HasValue && DataHora_Saida.HasValue)
+            {
+                TimeSpan diferrenceDateTime = DataHora_Saida.Value - DataHora_Entrada.Value;
+                return diferrenceDateTime.TotalMinutes > 60 ? true : false;
+            }
+            else
+            {
+                return false;
+            }
+
         }
         public int SetDuracaoHora()
         {
-            TimeSpan diferrenceDateTime = DataHora_Entrada.Value - DataHora_Saida.Value;
-            return diferrenceDateTime.Hours;
+            if (DataHora_Entrada.HasValue && DataHora_Saida.HasValue)
+            {
+                TimeSpan diferrenceDateTime = DataHora_Saida.Value - DataHora_Entrada.Value;
+                return (int)diferrenceDateTime.TotalHours;
+            }
+            else { return 0; }
         }
+    }
+
+    public class PostHistoricoVeiculos 
+    {
+        public string PlacaVeiculo { get; set; }
+        [JsonIgnore]
+        public DateTime? DataHora_Entrada { get; set; }
+        public int? Id_TiposVeiculos { get; set; }
+    }
+
+
+    public class PutHistoricoVeiculos
+    {
+        public string PlacaVeiculo { get; set; }
+        public List<decimal?> Notas_Moedas { get; set; }
+        public int? Id_TiposVeiculos { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace Auto_Keep.Controllers
         /// </summary>
         /// <param name="id_Veiculos">Id do veículo</param>
         /// <returns></returns>
-        [HttpGet("ListarPrecosTipoVeiculos/{idVeiculos}")]
+        [HttpGet("ListarPrecosTipoVeiculos/{id_Veiculos}")]
         public async Task<ActionResult<Precos>> ListarPrecosTipoVeiculos(int id_Veiculos)
         {
             var response = await _precosRepository.GetPrecosTipoVeiculo(id_Veiculos);

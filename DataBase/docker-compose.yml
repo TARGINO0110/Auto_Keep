@@ -14,7 +14,7 @@ services:
       - "5432:5432"
 
     volumes:
-      - C:\Users\Usuário\source\repos\Auto_Keep\DataBase:/var/lib/docker-desktop/postgresql/data
+      - C:\Users\L.TARGINO\source\repos\auto_keep\DataBase:/var/lib/docker-desktop/postgresql/data
       
   adminer:
     image: adminer

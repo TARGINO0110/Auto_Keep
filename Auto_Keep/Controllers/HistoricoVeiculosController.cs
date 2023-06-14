@@ -34,7 +34,7 @@ namespace Auto_Keep.Controllers
         /// <param name="placaVeiculo">Filtrar pela placa do veículo</param>
         /// <param name="page">Apresentar por página</param>
         /// <param name="rows">Quantidade de linhas</param>
-        [HttpGet("ListarHistoricosVeiculosPlacas")]
+        [HttpGet("ListarHistoricosVeiculosPlacas/{placaVeiculo}")]
         public async Task<ActionResult<IEnumerable<HistoricoVeiculos>>> ListarHistoricosVeiculosPlacas(string placaVeiculo, int? page, int? rows)
         {
             var response = await _historicoVeiculosRepository.GetHistoricoVeiculosPlacas(placaVeiculo, page, rows);
@@ -45,11 +45,61 @@ namespace Auto_Keep.Controllers
         /// Filtrar Historico do veículo pelo id do registro
         /// </summary>
         ///<param name="id_HistVeiculo">Id do veículo</param>
-        [HttpGet("FiltrarRegistroId")]
+        [HttpGet("FiltrarRegistroId/{id_HistVeiculo}")]
         public async Task<ActionResult<HistoricoVeiculos>> FiltrarRegistroId(long id_HistVeiculo)
         {
             var response = await _historicoVeiculosRepository.GetById(id_HistVeiculo);
             return Ok(response);
         }
+
+        /// <summary>
+        /// Obter valor e duaração da estadia atual
+        /// </summary>
+        /// <param name="id_HistVeiculo"></param>
+        /// <returns></returns>
+        [HttpGet("ObterValorEstadiaAtual/{id_HistVeiculo}")]
+        public async Task<ActionResult<HistoricoVeiculos>> ObterValorEstadiaAtual(long id_HistVeiculo)
+        {
+            var response = await _historicoVeiculosRepository.GetObterValorEstadiaAtual(id_HistVeiculo);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Registrar entrada do veículo
+        /// </summary>
+        /// <param name="postHistoricoVeiculos"></param>
+        /// <returns></returns>
+        [HttpPost("RegistrarHistoricoVeiculo")]
+        public async Task<ActionResult> RegistrarHistoricoVeiculo([FromBody] PostHistoricoVeiculos postHistoricoVeiculos)
+        {
+            await _historicoVeiculosRepository.PostEntradaVeiculo(postHistoricoVeiculos);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Atualizar saída do veículo
+        /// </summary>
+        /// <param name="id_HistoricoVeiculo">Id do registro</param>
+        /// <param name="putHistoricoVeiculos"></param>
+        /// <returns></returns>
+        [HttpPut("AtualizarSaidaVeiculo/{id_HistoricoVeiculo}")]
+        public async Task<ActionResult<HistoricoVeiculos>> AtualizarSaidaVeiculo(long id_HistoricoVeiculo, [FromBody] PutHistoricoVeiculos putHistoricoVeiculos)
+        {
+            var response = await _historicoVeiculosRepository.PutSaidaVeiculo(id_HistoricoVeiculo, putHistoricoVeiculos);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Remover histórico do veículo
+        /// </summary>
+        /// <param name="id_HistoricoVeiculo">Id do registro</param>
+        /// <returns></returns>
+        [HttpDelete("RemoverHistoricoVeiculo/{id_HistoricoVeiculo}")]
+        public async Task<ActionResult<long>> RemoverHistoricoVeiculo(long id_HistoricoVeiculo)
+        {
+            long response = await _historicoVeiculosRepository.DeleteHistVeiculo(id_HistoricoVeiculo);
+            return Ok(response);
+        }
+
     }
 }

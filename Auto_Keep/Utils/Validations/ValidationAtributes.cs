@@ -1,8 +1,6 @@
 ﻿using Auto_Keep.Helpers;
 using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Utils.Validations.Interfaces;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Auto_Keep.Utils.Validations
 {
@@ -56,6 +54,8 @@ namespace Auto_Keep.Utils.Validations
         {
             if (string.IsNullOrEmpty(historicoEntradaVeiculos.PlacaVeiculo)) throw new AppException("Informe a placa do seu veículo para processo de identificação!");
             if (historicoEntradaVeiculos.Id_TiposVeiculos is null) throw new AppException("Necessário informar o tipo do seu veículo para contabilizar o preço padrão!");
+            //VALIDAR PLACA DO VEÍCULO
+            if (historicoEntradaVeiculos.PlacaVeiculo.Length != 7) throw new AppException("A sua placa do veículo se encontra incoerente com o padrão definido pela DETRAN!");
         }
 
         public void AtributesRequestHistoricoSaidaVeiculos(HistoricoVeiculos historicoSaidaVeiculos)
@@ -68,7 +68,7 @@ namespace Auto_Keep.Utils.Validations
         {
             foreach (decimal cm in cedulasMoedas)
                 if (!CedulaMoedaValida(cm))
-                    throw new AppException($"Erro nesse valor {cm} As notas e moedas precisam ser passadas separas, segue o exemplo: {string.Join("\n", SiglasVeiculos().ToList())}");
+                    throw new AppException($"Erro nesse valor {cm} As notas e moedas precisam ser passadas separas, segue o exemplo: {string.Join("\n", NotasMoedas().ToList())}");
         }
 
         #endregion

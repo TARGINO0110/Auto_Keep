@@ -142,7 +142,7 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
         {
             try
             {
-                _dbContext.Attach(estoqueMonetario);
+                _dbContext.AttachRange(estoqueMonetario);
                 _dbContext.UpdateRange(estoqueMonetario);
                 await _dbContext.SaveChangesAsync();
 
