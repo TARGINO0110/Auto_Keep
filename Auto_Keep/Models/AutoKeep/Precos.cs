@@ -14,4 +14,22 @@ namespace Auto_Keep.Models.AutoKeep
         public int Id_TipoVeiculo { get; set; }
         public virtual TiposVeiculos TiposVeiculos { get; set; }
     }
+
+    public class PostPrecos
+    {
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? Preco { get; set; }
+        [ForeignKey("TiposVeiculos")]
+        [Required(ErrorMessage = "Informe o tipo do veiculo para atribuição de preço!")]
+        public int Id_TipoVeiculo { get; set; }
+    }
+
+    public class PutPrecos
+    {
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? Preco { get; set; }
+        [ForeignKey("TiposVeiculos")]
+        [Required(ErrorMessage = "Informe o tipo do veiculo para atribuição de preço!")]
+        public int Id_TipoVeiculo { get; set; }
+    }
 }

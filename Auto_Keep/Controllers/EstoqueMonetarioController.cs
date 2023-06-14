@@ -1,5 +1,6 @@
 ﻿using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Services.ServiceEstoqueMonetario.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auto_Keep.Controllers
@@ -7,6 +8,7 @@ namespace Auto_Keep.Controllers
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Administrador")]
     public class EstoqueMonetarioController : ControllerBase
     {
         private readonly IEstoqueMonetarioRepository _estoqueMonetarioRepository;
@@ -29,12 +31,12 @@ namespace Auto_Keep.Controllers
         /// <summary>
         /// Registrar novo estoque monetário
         /// </summary>
-        /// <param name="estoqueMonetario"></param>
+        /// <param name="postEstoqueMonetario"></param>
         /// <returns></returns>
         [HttpPost("RegistrarEstoque")]
-        public async Task<ActionResult> RegistrarEstoque([FromBody] EstoqueMonetario estoqueMonetario)
+        public async Task<ActionResult> RegistrarEstoque([FromBody] PostEstoqueMonetario postEstoqueMonetario)
         {
-            await _estoqueMonetarioRepository.PostEstoque(estoqueMonetario);
+            await _estoqueMonetarioRepository.PostEstoque(postEstoqueMonetario);
             return Ok();
         }
 
@@ -53,11 +55,11 @@ namespace Auto_Keep.Controllers
         /// Editar estoque monetário
         /// </summary>
         /// <param name="idEstoque">Id do estoque</param>
-        /// <param name="estoqueMonetario"></param>
+        /// <param name="putEstoqueMonetario"></param>
         [HttpPut("EditarEstoque/{idEstoque}")]
-        public async Task<ActionResult<EstoqueMonetario>> EditarEstoque(int idEstoque, [FromBody] EstoqueMonetario estoqueMonetario)
+        public async Task<ActionResult<EstoqueMonetario>> EditarEstoque(int idEstoque, [FromBody] PutEstoqueMonetario putEstoqueMonetario)
         {
-            var response = await _estoqueMonetarioRepository.PutEstoque(idEstoque, estoqueMonetario);
+            var response = await _estoqueMonetarioRepository.PutEstoque(idEstoque, putEstoqueMonetario);
             return Ok(response);
         }
 

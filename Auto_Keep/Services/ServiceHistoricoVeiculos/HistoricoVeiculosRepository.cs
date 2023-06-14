@@ -39,7 +39,7 @@ namespace Auto_Keep.Services.ServiceHistoricoVeiculos
             try
             {
                 IQueryable<HistoricoVeiculos> sourceData = null;
-                sourceData = _dbContext.HistoricoVeiculos.AsNoTracking();
+                sourceData = _dbContext.HistoricoVeiculos.Include(item => item.TiposVeiculos).ThenInclude(item => item.Precos).AsNoTracking();
 
                 return await PaginatedList<HistoricoVeiculos>.CreateAsync(sourceData, page ?? 1, rows ?? 200);
             }
@@ -54,7 +54,7 @@ namespace Auto_Keep.Services.ServiceHistoricoVeiculos
             try
             {
                 IQueryable<HistoricoVeiculos> sourceData = null;
-                sourceData = _dbContext.HistoricoVeiculos.AsNoTracking().Where(item => item.PlacaVeiculo == placaVeiculo);
+                sourceData = _dbContext.HistoricoVeiculos.AsNoTracking().Where(item => item.PlacaVeiculo == placaVeiculo).Include(item => item.TiposVeiculos).ThenInclude(item => item.Precos);
 
                 return await PaginatedList<HistoricoVeiculos>.CreateAsync(sourceData, page ?? 1, rows ?? 200);
             }
@@ -68,7 +68,7 @@ namespace Auto_Keep.Services.ServiceHistoricoVeiculos
         {
             try
             {
-                return await _dbContext.HistoricoVeiculos.FirstOrDefaultAsync(item => item.Id_HistVeiculo == id_HistVeiculo);
+                return await _dbContext.HistoricoVeiculos.Include(item => item.TiposVeiculos).ThenInclude(item => item.Precos).FirstOrDefaultAsync(item => item.Id_HistVeiculo == id_HistVeiculo);
             }
             catch (Exception ex)
             {

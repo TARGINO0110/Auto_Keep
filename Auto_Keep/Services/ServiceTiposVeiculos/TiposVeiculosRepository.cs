@@ -3,6 +3,7 @@ using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Models.DbContextAutoKeep;
 using Auto_Keep.Services.ServiceTiposVeiculos.Interfaces;
 using Auto_Keep.Utils.Validations.Interfaces;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -12,11 +13,16 @@ namespace Auto_Keep.Services.ServiceTiposVeiculos
     {
         private readonly AutoKeepContext _dbContext;
         private readonly IValidationAtributes _validationAtributes;
+        private readonly IMapper _mapper;
 
-        public TiposVeiculosRepository(AutoKeepContext dbContext, IValidationAtributes validationAtributes)
+        public TiposVeiculosRepository(
+            AutoKeepContext dbContext, 
+            IValidationAtributes validationAtributes,
+            IMapper mapper)
         {
             _dbContext = dbContext;
             _validationAtributes = validationAtributes;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<TiposVeiculos>> GetVeiculos()
@@ -58,14 +64,16 @@ namespace Auto_Keep.Services.ServiceTiposVeiculos
             }
         }
 
-        public async Task PostTiposVeiculos(TiposVeiculos tiposVeiculos)
+        public async Task PostTiposVeiculos(PostTiposVeiculos postTiposVeiculos)
         {
-            _validationAtributes.AtributesRequestTiposVeiculos(tiposVeiculos);
-            if (await GetExistTipoVeiculo((char)tiposVeiculos.Sigla_Veiculo)) { throw new AppException("O Tipo de veículo ja possui cadastrado na base de dados!"); }
+            var mapPostTipoVeiculo = _mapper.Map<TiposVeiculos>(postTiposVeiculos);
+
+            _validationAtributes.AtributesRequestTiposVeiculos(mapPostTipoVeiculo);
+            if (await GetExistTipoVeiculo((char)mapPostTipoVeiculo.Sigla_Veiculo)) { throw new AppException("O Tipo de veículo ja possui cadastrado na base de dados!"); }
 
             try
             {
-                await _dbContext.AddAsync(tiposVeiculos);
+                await _dbContext.AddAsync(mapPostTipoVeiculo);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -74,17 +82,19 @@ namespace Auto_Keep.Services.ServiceTiposVeiculos
             }
         }
 
-        public async Task<TiposVeiculos> PutTiposVeiculos(int id_TipoVeiculo, TiposVeiculos tiposVeiculos)
+        public async Task<TiposVeiculos> PutTiposVeiculos(int id_TipoVeiculo, PutTiposVeiculos putTiposVeiculos)
         {
+            var mapPutTiposVeiculo = _mapper.Map<TiposVeiculos>(putTiposVeiculos);
+
             var tipoVeiculoBase = await GetById(id_TipoVeiculo) ?? throw new AppException("Nenhum Tipo de veículo identificado na base de dados!");
 
             _dbContext.Attach(tipoVeiculoBase);
 
-            foreach (PropertyInfo inf in tiposVeiculos.GetType().GetProperties())
+            foreach (PropertyInfo inf in mapPutTiposVeiculo.GetType().GetProperties())
             {
-                if (inf.GetValue(tiposVeiculos) != null && inf.Name != "Id_TipoVeiculo" && inf.Name != "Tipo_Veiculo" && inf.Name != "Precos")
+                if (inf.GetValue(mapPutTiposVeiculo) != null && inf.Name != "Id_TipoVeiculo" && inf.Name != "Tipo_Veiculo" && inf.Name != "Precos")
                 {
-                    _dbContext.Entry(tipoVeiculoBase).Property(inf.Name).CurrentValue = inf.GetValue(tiposVeiculos);
+                    _dbContext.Entry(tipoVeiculoBase).Property(inf.Name).CurrentValue = inf.GetValue(mapPutTiposVeiculo);
                 }
             }
 

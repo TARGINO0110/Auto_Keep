@@ -7,14 +7,18 @@ using Auto_Keep.Services.ServicePrecos;
 using Auto_Keep.Services.ServicePrecos.Interfaces;
 using Auto_Keep.Services.ServiceTiposVeiculos;
 using Auto_Keep.Services.ServiceTiposVeiculos.Interfaces;
+using Auto_Keep.Utils;
 using Auto_Keep.Utils.Validations;
 using Auto_Keep.Utils.Validations.Interfaces;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IO.Compression;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -108,6 +112,28 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.Fastest;
 });
 
+//********************* AUTENTICAÇÃO VIA JWT  **********************
+
+var key = Encoding.ASCII.GetBytes(Settings.Secret);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        RequireExpirationTime = true,
+    };
+});
+
 // ********  UTILIZAÇÃO DE [TRANSIENT] PARA INTERFACE E [SINGLETON] PARA CONEXÃO AO BANCO  *******************
 
 builder.Services.AddTransient<IEstoqueMonetarioRepository, EstoqueMonetarioRepository>();
@@ -119,6 +145,27 @@ builder.Services.AddTransient<IValidationAtributes, ValidationAtributes>();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var app = builder.Build();
+
+// ********** VALIDAÇÃO ANTI-FALSIFICAÇÃO [COOKIES] *************
+
+var antiforgery = app.Services.GetRequiredService<IAntiforgery>();
+app.Use((context, next) =>
+{
+    var requestPath = context.Request.Path.Value;
+
+    if (
+        string.Equals(requestPath, "/", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(requestPath, "/index.html", StringComparison.OrdinalIgnoreCase))
+    {
+        // The request token can be sent as a JavaScript-readable cookie, 
+        // and Angular uses it by default.
+        var tokens = antiforgery.GetAndStoreTokens(context);
+        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+                    new CookieOptions() { HttpOnly = false });
+    }
+
+    return next(context);
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

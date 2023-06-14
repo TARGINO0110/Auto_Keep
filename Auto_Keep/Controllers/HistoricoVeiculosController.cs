@@ -1,5 +1,6 @@
 ﻿using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Services.ServiceHistoricoVeiculos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auto_Keep.Controllers
@@ -7,6 +8,7 @@ namespace Auto_Keep.Controllers
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class HistoricoVeiculosController : ControllerBase
     {
         private readonly IHistoricoVeiculosRepository _historicoVeiculosRepository;
@@ -21,6 +23,7 @@ namespace Auto_Keep.Controllers
         /// </summary>
         /// <param name="page">Apresentar por página</param>
         /// <param name="rows">Quantidade de linhas</param>
+        [Authorize(Roles = "Administrador")]
         [HttpGet("ListarHistoricosVeiculosGeral")]
         public async Task<ActionResult<IEnumerable<HistoricoVeiculos>>> ListarHistoricosVeiculosGeral(int? page, int? rows)
         {
@@ -34,6 +37,7 @@ namespace Auto_Keep.Controllers
         /// <param name="placaVeiculo">Filtrar pela placa do veículo</param>
         /// <param name="page">Apresentar por página</param>
         /// <param name="rows">Quantidade de linhas</param>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpGet("ListarHistoricosVeiculosPlacas/{placaVeiculo}")]
         public async Task<ActionResult<IEnumerable<HistoricoVeiculos>>> ListarHistoricosVeiculosPlacas(string placaVeiculo, int? page, int? rows)
         {
@@ -45,6 +49,7 @@ namespace Auto_Keep.Controllers
         /// Filtrar Historico do veículo pelo id do registro
         /// </summary>
         ///<param name="id_HistVeiculo">Id do veículo</param>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpGet("FiltrarRegistroId/{id_HistVeiculo}")]
         public async Task<ActionResult<HistoricoVeiculos>> FiltrarRegistroId(long id_HistVeiculo)
         {
@@ -53,10 +58,10 @@ namespace Auto_Keep.Controllers
         }
 
         /// <summary>
-        /// Obter valor e duaração da estadia atual
+        /// Obter valor e duração da estadia atual em aberto
         /// </summary>
         /// <param name="id_HistVeiculo"></param>
-        /// <returns></returns>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpGet("ObterValorEstadiaAtual/{id_HistVeiculo}")]
         public async Task<ActionResult<HistoricoVeiculos>> ObterValorEstadiaAtual(long id_HistVeiculo)
         {
@@ -68,7 +73,7 @@ namespace Auto_Keep.Controllers
         /// Registrar entrada do veículo
         /// </summary>
         /// <param name="postHistoricoVeiculos"></param>
-        /// <returns></returns>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpPost("RegistrarHistoricoVeiculo")]
         public async Task<ActionResult> RegistrarHistoricoVeiculo([FromBody] PostHistoricoVeiculos postHistoricoVeiculos)
         {
@@ -81,7 +86,7 @@ namespace Auto_Keep.Controllers
         /// </summary>
         /// <param name="id_HistoricoVeiculo">Id do registro</param>
         /// <param name="putHistoricoVeiculos"></param>
-        /// <returns></returns>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpPut("AtualizarSaidaVeiculo/{id_HistoricoVeiculo}")]
         public async Task<ActionResult<HistoricoVeiculos>> AtualizarSaidaVeiculo(long id_HistoricoVeiculo, [FromBody] PutHistoricoVeiculos putHistoricoVeiculos)
         {
@@ -93,7 +98,7 @@ namespace Auto_Keep.Controllers
         /// Remover histórico do veículo
         /// </summary>
         /// <param name="id_HistoricoVeiculo">Id do registro</param>
-        /// <returns></returns>
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("RemoverHistoricoVeiculo/{id_HistoricoVeiculo}")]
         public async Task<ActionResult<long>> RemoverHistoricoVeiculo(long id_HistoricoVeiculo)
         {

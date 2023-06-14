@@ -6,8 +6,8 @@ namespace Auto_Keep.Services.ServiceTiposVeiculos.Interfaces
     {
         Task<IEnumerable<TiposVeiculos>> GetVeiculos();
         Task<TiposVeiculos> GetById(int id_TipoVeiculo);
-        Task PostTiposVeiculos(TiposVeiculos tiposVeiculos);
-        Task<TiposVeiculos> PutTiposVeiculos(int id_TipoVeiculo, TiposVeiculos tiposVeiculos);
+        Task PostTiposVeiculos(PostTiposVeiculos postTiposVeiculos);
+        Task<TiposVeiculos> PutTiposVeiculos(int id_TipoVeiculo, PutTiposVeiculos putTiposVeiculos);
         Task<int> DeleteTiposVeiculos(int id_TipoVeiculo);
     }
 }

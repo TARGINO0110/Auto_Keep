@@ -10,6 +10,7 @@ namespace Auto_Keep.Models.AutoKeep
         [MaxLength(100)]
         public string Tipo_Veiculo { get => SetDescVeiculo(); }
         public Precos Precos { get; set; }
+
         public string SetDescVeiculo()
         {
             return Sigla_Veiculo switch
@@ -20,5 +21,21 @@ namespace Auto_Keep.Models.AutoKeep
                 _ => "Desconhecido",
             };
         }
+    }
+
+    /// <summary>
+    /// Moto - M / Carro - C / Ônibus - O
+    /// </summary>
+    public class PostTiposVeiculos 
+    {
+        public char? Sigla_Veiculo { get; set; }
+    }
+
+    /// <summary>
+    /// Moto - M / Carro - C / Ônibus - O
+    /// </summary>
+    public class PutTiposVeiculos
+    {
+        public char? Sigla_Veiculo { get; set; }
     }
 }

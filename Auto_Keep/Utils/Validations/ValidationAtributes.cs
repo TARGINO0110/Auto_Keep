@@ -1,6 +1,7 @@
 ﻿using Auto_Keep.Helpers;
 using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Utils.Validations.Interfaces;
+using System.Linq;
 
 namespace Auto_Keep.Utils.Validations
 {
@@ -39,7 +40,7 @@ namespace Auto_Keep.Utils.Validations
 
         public void AtributesRequestTiposVeiculos(TiposVeiculos tiposVeiculos)
         {
-            if (tiposVeiculos.Sigla_Veiculo is null) throw new AppException($"Necessario informar a sigla do tipo de veículo para identificação, opções disponiveis: {string.Join("\n", SiglasVeiculos().ToList())}");
+            if (tiposVeiculos.Sigla_Veiculo is null || !SiglasVeiculos().Any(item => item[0].Equals(tiposVeiculos.Sigla_Veiculo))) throw new AppException($"Necessario informar a sigla do tipo de veículo para identificação, opções disponiveis: {string.Join("\n", SiglasVeiculos().ToList())}");
         }
 
         private static List<string> SiglasVeiculos()

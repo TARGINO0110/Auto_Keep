@@ -3,6 +3,7 @@ using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Models.DbContextAutoKeep;
 using Auto_Keep.Services.ServiceEstoqueMonetario.Interfaces;
 using Auto_Keep.Utils.Validations.Interfaces;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -12,17 +13,23 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
     {
         private readonly AutoKeepContext _dbContext;
         private readonly IValidationAtributes _validationAtributes;
-        public EstoqueMonetarioRepository(AutoKeepContext dbContext, IValidationAtributes validationAtributes)
+        private readonly IMapper _mapper;
+
+        public EstoqueMonetarioRepository(
+            AutoKeepContext dbContext,
+            IValidationAtributes validationAtributes,
+            IMapper mapper)
         {
             _dbContext = dbContext;
             _validationAtributes = validationAtributes;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<EstoqueMonetario>> GetEstoqueGeral()
         {
             try
             {
-                return await _dbContext.EstoqueMonetarios.AsNoTracking().ToListAsync();
+                return await _dbContext.EstoqueMonetarios.AsNoTracking().OrderBy(item => item.Valor_Nota_Moeda).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -66,17 +73,19 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
             }
         }
 
-        public async Task PostEstoque(EstoqueMonetario estoqueMonetario)
+        public async Task PostEstoque(PostEstoqueMonetario postEstoqueMonetario)
         {
-            //Validar Atributos para Post ou Put
-            _validationAtributes.AtributesRequestEstoqueMonetario(estoqueMonetario);
-            if (await GetValidaCedulaMoedaExiste((decimal)estoqueMonetario.Valor_Nota_Moeda)) throw new AppException("A nota ou moeda já existe em nossa base de dados!");
+            var mapPostEstoqueMonetario = _mapper.Map<EstoqueMonetario>(postEstoqueMonetario);
 
-            estoqueMonetario.Dt_Atualizado = DateTime.Now.ToUniversalTime();
+            //Validar Atributos para Post ou Put
+            _validationAtributes.AtributesRequestEstoqueMonetario(mapPostEstoqueMonetario);
+            if (await GetValidaCedulaMoedaExiste((decimal)mapPostEstoqueMonetario.Valor_Nota_Moeda)) throw new AppException("A nota ou moeda já existe em nossa base de dados!");
+
+            mapPostEstoqueMonetario.Dt_Atualizado = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
 
             try
             {
-                await _dbContext.AddAsync(estoqueMonetario);
+                await _dbContext.AddAsync(mapPostEstoqueMonetario);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -85,21 +94,23 @@ namespace Auto_Keep.Services.ServiceEstoqueMonetario
             }
         }
 
-        public async Task<EstoqueMonetario> PutEstoque(int idEstoque, EstoqueMonetario estoqueMonetario)
+        public async Task<EstoqueMonetario> PutEstoque(int idEstoque, PutEstoqueMonetario putEstoqueMonetario)
         {
+            var mapPutEstoqueMonetario = _mapper.Map<EstoqueMonetario>(putEstoqueMonetario);
+
             //Validar Atributos para Post ou Put
-            _validationAtributes.AtributesRequestEstoqueMonetario(estoqueMonetario);
+            _validationAtributes.AtributesRequestEstoqueMonetario(mapPutEstoqueMonetario);
             var estoqueMonetarioBase = await GetById(idEstoque) ?? throw new AppException("Nenhum estoque identificado na base de dados!");
 
-            estoqueMonetarioBase.Dt_Atualizado = DateTime.Now.ToUniversalTime();
+            mapPutEstoqueMonetario.Dt_Atualizado = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
 
             _dbContext.Attach(estoqueMonetarioBase);
 
-            foreach (PropertyInfo inf in estoqueMonetario.GetType().GetProperties())
+            foreach (PropertyInfo inf in mapPutEstoqueMonetario.GetType().GetProperties())
             {
-                if (inf.GetValue(estoqueMonetario) != null && inf.Name != "Id_Estoque")
+                if (inf.GetValue(mapPutEstoqueMonetario) != null && inf.Name != "Id_Estoque")
                 {
-                    _dbContext.Entry(estoqueMonetarioBase).Property(inf.Name).CurrentValue = inf.GetValue(estoqueMonetario);
+                    _dbContext.Entry(estoqueMonetarioBase).Property(inf.Name).CurrentValue = inf.GetValue(mapPutEstoqueMonetario);
                 }
             }
 

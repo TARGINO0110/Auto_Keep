@@ -1,12 +1,15 @@
 ﻿using Auto_Keep.Models.AutoKeep;
 using Auto_Keep.Services.ServiceTiposVeiculos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Auto_Keep.Controllers
 {
     [Produces("application/json")]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class TiposVeiculosController : ControllerBase
     {
         private readonly ITiposVeiculosRepository _tiposVeiculosRepository;
@@ -19,6 +22,7 @@ namespace Auto_Keep.Controllers
         /// <summary>
         /// Obter lista de todoos tipos de veiculos
         /// </summary>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpGet("ListarTipos")]
         public async Task<ActionResult<IEnumerable<TiposVeiculos>>> ListarTipos()
         {
@@ -30,6 +34,7 @@ namespace Auto_Keep.Controllers
         /// Filtrar tipo de veiculo por id do registro
         /// </summary>
         /// <param name="id_TipoVeiculo">Id do tipo de veiculo</param>
+        [Authorize(Roles = "Administrador,Cliente")]
         [HttpGet("FiltrarTiposVeiculosPorId/{id_TipoVeiculo}")]
         public async Task<ActionResult<TiposVeiculos>> FiltrarTiposVeiculosPorId(int id_TipoVeiculo)
         {
@@ -40,11 +45,12 @@ namespace Auto_Keep.Controllers
         /// <summary>
         /// Registrar tipos de veículos
         /// </summary>
-        /// <param name="tiposVeiculos"></param>
+        /// <param name="postTiposVeiculos"></param>
+        [Authorize(Roles = "Administrador")]
         [HttpPost("RegistrarTiposVeiculos")]
-        public async Task<ActionResult> RegistrarTiposVeiculos([FromBody] TiposVeiculos tiposVeiculos)
+        public async Task<ActionResult> RegistrarTiposVeiculos([FromBody] PostTiposVeiculos postTiposVeiculos)
         {
-            await _tiposVeiculosRepository.PostTiposVeiculos(tiposVeiculos);
+            await _tiposVeiculosRepository.PostTiposVeiculos(postTiposVeiculos);
             return Ok();
         }
 
@@ -52,12 +58,12 @@ namespace Auto_Keep.Controllers
         /// Editar tipos de veículos
         /// </summary>
         /// <param name="id_TipoVeiculo">Id do tipo de veículo</param>
-        /// <param name="tiposVeiculos"></param>
-        /// <returns></returns>
+        /// <param name="putTiposVeiculos"></param>
+        [Authorize(Roles = "Administrador")]
         [HttpPut("EditarTiposVeiculos/{id_TipoVeiculo}")]
-        public async Task<ActionResult<TiposVeiculos>> EditarTiposVeiculos(int id_TipoVeiculo, [FromBody] TiposVeiculos tiposVeiculos)
+        public async Task<ActionResult<TiposVeiculos>> EditarTiposVeiculos(int id_TipoVeiculo, [FromBody] PutTiposVeiculos putTiposVeiculos)
         {
-            var response = await _tiposVeiculosRepository.PutTiposVeiculos(id_TipoVeiculo, tiposVeiculos);
+            var response = await _tiposVeiculosRepository.PutTiposVeiculos(id_TipoVeiculo, putTiposVeiculos);
             return Ok(response);
         }
 
@@ -65,6 +71,7 @@ namespace Auto_Keep.Controllers
         /// Remover tipos de veículos
         /// </summary>
         /// <param name="id_TipoVeiculo">Id do tipo de veículo</param>
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("RemoverTiposVeiculos/{id_TipoVeiculo}")]
         public async Task<ActionResult<int>> RemoverTiposVeiculos(int id_TipoVeiculo)
         {

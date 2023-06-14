@@ -15,4 +15,24 @@ namespace Auto_Keep.Models.AutoKeep
         public decimal? Valor_Nota_Moeda { get; set; }
         public DateTime? Dt_Atualizado { get; set; }    
     }
+
+    public class PostEstoqueMonetario
+    {
+        public bool? Nota { get; set; }
+        public bool? Moeda { get; set; }
+        public string DescValor { get; set; }
+        public int? Qtd { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? Valor_Nota_Moeda { get; set; }
+    }
+
+    public class PutEstoqueMonetario
+    {
+        public bool? Nota { get; set; }
+        public bool? Moeda { get; set; }
+        public string DescValor { get; set; }
+        public int? Qtd { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? Valor_Nota_Moeda { get; set; }
+    }
 }
