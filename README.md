@@ -1,7 +1,7 @@
 # Auto Keep
 Projeto destinado ao gerenciamento de um estacionamento com pagamento em dinheiro automático
 
-![image_auto_keep](https://github.com/TARGINO0110/Auto_Keep/assets/40901408/2c1080fd-0f19-4401-9635-bad0e1b0e8f7)
+![246444764-2c1080fd-0f19-4401-9635-bad0e1b0e8f7](https://github.com/TARGINO0110/Auto_Keep/assets/40901408/3ddf93ab-aff4-4b0e-8ecf-b6ab166602d4)
 
 ## Etapas para seguir:
 
@@ -19,7 +19,7 @@ docker pull postgres
 ```
 Após Baixar o PostgresSQL Acesse a Pasta do repositório `DataBase`
 
-![explorer_QnBoV9VPqj](https://github.com/TARGINO0110/Auto_Keep/assets/40901408/90af9f3c-77a6-401d-88a6-acb84cf75fce)
+![246475708-90af9f3c-77a6-401d-88a6-acb84cf75fce](https://github.com/TARGINO0110/Auto_Keep/assets/40901408/6d97ba25-9740-4d29-87fd-d8b0f5d9c516)
 
 - Visualizando o arquivo docker-compose.yml será nessa estrutura a montagem do .yml:
 
